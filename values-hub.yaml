@@ -7,16 +7,54 @@ clusterGroup:
     - golang-external-secrets
     - config-demo
     - hello-world
+    - redhat-ods-operator:
+        operatorGroup: true
+        targetNamespaces:
+    - redhat-ods-applications:
+        operatorGroup: false
+    - redhat-ods-monitoring:
+        operatorGroup: false
+    - redhat-notebooks:
+        operatorGroup: false
+    - nvidia-gpu-operator:
+        operatorGroup: true
+        targetNamespaces:
+          - nvidia-gpu-operator
+    - openshift-serverless:
+        operatorGroup: true
+        targetNamespaces:
   subscriptions:
     acm:
       name: advanced-cluster-management
       namespace: open-cluster-management
       channel: release-2.10
       #csv: advanced-cluster-management.v2.6.1
+    nvidia-gpu:
+      name: gpu-operator-certified
+      namespace: nvidia-gpu-operator
+      source: certified-operators
+      channel: v23.9
+    pipelines:
+      name: openshift-pipelines-operator-rh
+      namespace: openshift-operators
+      channel: latest
+    serverless:
+      name: serverless-operator
+      namespace: openshift-serverless
+      channel: stable
+    istio:
+      name: servicemeshoperator
+      namespace: openshift-operators
+      channel: stable
+    rhoai:
+      name: rhods-operator
+      namespace: redhat-ods-operator
+      channel: eus-2.8
   projects:
     - hub
     - config-demo
     - hello-world
+    - rhoai-install
   # Explicitly mention the cluster-state based overrides we plan to use for this pattern.
   # We can use self-referential variables because the chart calls the tpl function with these variables defined
   sharedValueFiles:
@@ -68,6 +106,11 @@ clusterGroup:
       namespace: hello-world
       project: hello-world
       path: charts/all/hello-world
+    rhoai-install:
+      name: rhoai-install
+      namespace: redhat-ods-applications
+      project: rhoai-install
+      path: charts/rhoai/dsc
   imperative:
     # NOTE: We *must* use lists and not hashes. As hashes lose ordering once parsed by helm
     # The default schedule is every 10 minutes: imperative.schedule

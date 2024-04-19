@@ -1,0 +1,6 @@
+apiVersion: v2
+description: A Helm chart to configure the Red Hat OpenShift AI DataScienceCluster
+keywords:
+- pattern
+name: rhoai-dsc
+version: 0.0.1
