@@ -119,6 +119,11 @@ clusterGroup:
       namespace: redhat-ods-applications
       project: rhoai-install
       path: charts/rhoai/dsc
+    nfd-config:
+      name: nfd-config
+      namespace: openshift-nfd
+      project: rhoai-install
+      path: charts/rhoai/nfd
   imperative:
     # NOTE: We *must* use lists and not hashes. As hashes lose ordering once parsed by helm
     # The default schedule is every 10 minutes: imperative.schedule
