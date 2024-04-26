@@ -124,6 +124,11 @@ clusterGroup:
       namespace: openshift-nfd
       project: rhoai-install
       path: charts/rhoai/nfd
+    nvidia-operator-config:
+      name: nvidia-operator-config
+      namespace: nvidia-gpu-operator
+      project: rhoai-install
+      path: charts/rhoai/nvidia-operator-config
   imperative:
     # NOTE: We *must* use lists and not hashes. As hashes lose ordering once parsed by helm
     # The default schedule is every 10 minutes: imperative.schedule

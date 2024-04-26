@@ -1,0 +1,6 @@
+apiVersion: v2
+description: A Helm chart to configure the Nvidia GPU Operator
+keywords:
+- pattern
+name: nvidia-operator-config
+version: 0.0.1
