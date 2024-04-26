@@ -2,6 +2,8 @@ kind: ClusterPolicy
 apiVersion: nvidia.com/v1
 metadata:
   name: gpu-cluster-policy
+  annotations:
+    argocd.argoproj.io/sync-wave: "75"
 spec:
   operator:
     defaultRuntime: crio
