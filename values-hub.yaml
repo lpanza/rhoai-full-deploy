@@ -20,6 +20,10 @@ clusterGroup:
         operatorGroup: true
         targetNamespaces:
           - nvidia-gpu-operator
+    - openshift-nfd:
+        operatorGroup: true
+        targetNamespaces:
+          - openshift-nfd
     - openshift-serverless:
         operatorGroup: true
         targetNamespaces:
@@ -50,6 +54,10 @@ clusterGroup:
       name: rhods-operator
       namespace: redhat-ods-operator
       channel: eus-2.8
+    nfd:
+      name: nfd
+      namespace: openshift-nfd
+      channel: stable
   projects:
     - hub
     - config-demo
