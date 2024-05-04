@@ -1,4 +1,68 @@
 ---
+# Source: nvidia-operator-config/templates/rbac/service-accout.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  creationTimestamp: null
+  name: rhoai-gpu-updater
+  namespace: nvidia-gpu-operator
+---
+# Source: nvidia-operator-config/templates/rbac/role-view-pod.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: view-pod
+  namespace: nvidia-gpu-operator
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - get
+  - list
+  - watch
+---
+# Source: nvidia-operator-config/templates/rbac/role-binding-view-pod.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: vew-pod-rhoai-gpu-updater-sa
+  namespace: nvidia-gpu-operator
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: view-pod
+subjects:
+- kind: ServiceAccount
+  name: rhoai-gpu-updater
+  namespace: nvidia-gpu-operator
+---
+# Source: nvidia-operator-config/templates/rbac/job-rhoai-gpu-updater.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rhoai-gpu-updater
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      serviceAccountName: rhoai-gpu-updater
+      containers:
+      - image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+        name: rhoai-gpu-updater
+        command:
+        - /bin/bash
+        args:
+        - -c
+        - |
+          export VALIDATOR_POD=`oc get pods -n nvidia-gpu-operator | grep nvidia-operator-validator | awk '{ print $1 }'`
+          oc wait -n nvidia-gpu-operator --for=condition=Ready pod/${VALIDATOR_POD} --timeout=-1s
+          oc delete cm -n redhat-ods-applications migration-gpu-status
+          oc delete pods -n redhat-ods-applications -l app.opendatahub.io/rhods-dashboard=true
+---
 # Source: nvidia-operator-config/templates/gpu-cluster-policy.yaml
 kind: ClusterPolicy
 apiVersion: nvidia.com/v1

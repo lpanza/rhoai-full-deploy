@@ -1,4 +1,37 @@
 ---
+# Source: rhoai-dsc/templates/rbac/role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: rhoai-delete-pod-cm
+  namespace: redhat-ods-applications
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - configmaps
+  verbs:
+  - get
+  - list
+  - delete
+  - watch
+---
+# Source: rhoai-dsc/templates/rbac/role-binding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: rhoai-delete-pod-cm-rhoai-gpu-updater-sa
+  namespace: redhat-ods-applications
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: rhoai-delete-pod-cm
+subjects:
+- kind: ServiceAccount
+  name: rhoai-gpu-updater
+  namespace: nvidia-gpu-operator
+---
 # Source: rhoai-dsc/templates/dsc.yaml
 apiVersion: datasciencecluster.opendatahub.io/v1
 kind: DataScienceCluster
