@@ -9,7 +9,7 @@ spec:
   template:
     spec:
       restartPolicy: OnFailure
-      serviceAccount: rhoai-gpu-updater
+      serviceAccountName: rhoai-gpu-updater
       containers:
       - image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
         name: rhoai-gpu-updater
