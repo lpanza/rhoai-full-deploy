@@ -18,7 +18,25 @@ spec:
         args:
         - -c
         - |
+          while true
+          do
+            echo "Checking if nvidia-operator-validator pod exists..."
+
+            oc get pods -n nvidia-gpu-operator | grep nvidia-operator-validator
+            if [[ $? -eq '0' ]]; then
+              echo "Found! Breaking loop"
+              break
+            fi
+            sleep 5s
+          done
+
           export VALIDATOR_POD=`oc get pods -n nvidia-gpu-operator | grep nvidia-operator-validator | awk '{ print $1 }'`
+
+          echo "Waiting for ${VALIDATOR_POD} to be Ready..."
+
           oc wait -n nvidia-gpu-operator --for=condition=Ready pod/${VALIDATOR_POD} --timeout=-1s
+
+          echo "${VALIDATOR_POD} Ready, deleting migration-gpu-status cm and restarting dashboard Pods"
+
           oc delete cm -n redhat-ods-applications migration-gpu-status
           oc delete pods -n redhat-ods-applications -l app.opendatahub.io/rhods-dashboard=true
