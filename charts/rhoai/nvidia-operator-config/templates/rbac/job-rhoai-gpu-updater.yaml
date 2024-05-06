@@ -18,6 +18,8 @@ spec:
         args:
         - -c
         - |
+          echo "Waiting a bit for the script to start."
+          sleep 5m
           while true
           do
             echo "Checking if nvidia-operator-validator pod exists..."
