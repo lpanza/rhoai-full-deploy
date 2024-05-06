@@ -32,8 +32,6 @@ spec:
 
           export VALIDATOR_POD=`oc get pods -n nvidia-gpu-operator | grep nvidia-operator-validator | awk '{ print $1 }'`
 
-          #oc wait -n nvidia-gpu-operator --for=condition=Ready pod/${VALIDATOR_POD} --timeout=-1s
-          ## da cambiare oc get pods -n nvidia-gpu-operator ${VALIDATOR_POD} -o jsonpath='{.status.conditions[?(@.type=="Ready")].status}'
           until [`oc get pods -n nvidia-gpu-operator ${VALIDATOR_POD} -o jsonpath='{.status.conditions[?(@.type=="Ready")].status}'` -ne "True"]
           do
             echo "Waiting for Pod ${VALIDATOR_POD} to be Ready..."
