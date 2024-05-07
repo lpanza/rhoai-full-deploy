@@ -32,3 +32,4 @@ To deploy the pattern, run ```./pattern.sh make install```. The command will run
 * ```make```
 * ```helm```
 * ```ansible```
+After the command is issued Red Hat OpenShift GitOps is going to be installed, and after that an ArgoCD Application is going to take over and deploy this repositories' components stated in the ```values-hub.yaml``` file.
